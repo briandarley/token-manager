@@ -1,0 +1,82 @@
+//Color contrast picker
+//https://learnui.design/tools/accessible-color-generator.html
+
+$fa-font-path: "~fontawesome-free/webfonts";
+$icon-font-path: "~bootstrap-icons/font/fonts";
+@import "variables";
+@import "~bootstrap/scss/functions";
+
+//custom colors
+$yellow: #ffc107 !default;
+$red: #dc3545 !default;
+$info: lighten($carolina-blue, 20%) !default;
+$link-color: darken($carolina-blue, 10%) !default;
+$link-decoration: none !default;
+$link-hover-color: darken($link-color, 15%) !default;
+$link-hover-decoration: underline !default;
+$primary: $carolina-blue;
+$secondary: lighten($carolina-blue, 50%);
+$light-blue: lighten($carolina-blue, 57%);
+$light-yellow: lighten($yellow, 40%);
+$light-red: lighten($red, 40%);
+@import "~bootstrap/scss/variables";
+
+//Recalculate utility colors with the new custom colors
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    "carolina-blue": $carolina-blue,
+    "athletics-navy": $athletics-navy,
+    "light-blue": $light-blue,
+    "light-yellow": $light-yellow,
+    "light-red": $light-red,
+  )
+);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+$utilities-colors: map-merge($theme-colors, $utilities-colors);
+$utilities-text-colors: map-loop(
+  $utilities-colors,
+  rgba-css-var,
+  "$key",
+  "text"
+);
+$utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
+
+@import "~bootstrap/scss/bootstrap";
+@import "~fontawesome-free/scss/fontawesome";
+@import "~fontawesome-free/scss/solid";
+@import "~fontawesome-free/scss/regular";
+@import "~fontawesome-free/scss/brands";
+@import "~fontawesome-free/scss/v4-shims";
+
+//https://icons.getbootstrap.com/#usage
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+// $theme-colors: (
+//     //"primary": $primary,
+//     //"secondary": $secondary,
+//     //"success": $success,
+//     //"info": $info,
+//     //"warning": $warning,
+//     //"danger": $danger,
+//     //"light": $light,
+//     //"dark": $dark,
+//     "carolina-blue": $carolina-blue,
+//     "athletics-navy": $athletics-navy,
+//     "carolina": $carolina-blue,
+//   ) ;
+
+.btn-info {
+  color: $white;
+}
+
+.table {
+  thead tr {
+    background: $carolina-blue;
+    color: $white;
+  }
+  tr:nth-child(even) {
+    background: $light-blue;
+  }
+}
+
