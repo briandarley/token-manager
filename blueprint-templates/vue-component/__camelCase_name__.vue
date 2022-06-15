@@ -5,6 +5,7 @@
 </template>
 <script>
     export default {
+        dependencies: [],
         setup() {},
         created(){},
         mounted() {},

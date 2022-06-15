@@ -31,6 +31,7 @@
     "node-polyfill-webpack-plugin": "^1.1.4",
     "node-sass": "^7.0.1",
     "sass-loader": "^13.0.0",
+    "vue-inject": "^2.1.1",
     "vue-router": "^4.0.15"
   },
   "eslintConfig": {

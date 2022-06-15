@@ -7,33 +7,36 @@
 </template>
 
 <script>
-import ConfigReaderService from "./services/configReaderService";
 import AppStart from "./components/views/AppStart";
-
 
 export default {
   name: "App",
-  components: {
-      AppStart
-  },
+  components: { AppStart },
+  dependencies: ["ConfigReaderService"],
+
+  setup() {},
+  created() {},
+
   data() {
     return {
       environment: "none",
+      configReaderService: null,
     };
   },
   async mounted() {
-    this.environment = await this.getConfiguration();
+    this.initialize();
+    
   },
   methods: {
+    async initialize() {
+      this.environment = await this.getConfiguration();
+    },
     async getConfiguration() {
-      window.console.log(await ConfigReaderService().getEnvironment());
-
-      return await ConfigReaderService().getEnvironment();
+      return await this.ConfigReaderService.getEnvironment();
     },
   },
 };
 </script>
 
 <style lang="scss">
-
 </style>

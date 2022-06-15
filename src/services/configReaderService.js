@@ -1,6 +1,6 @@
-import axios from "axios";
+import injector from 'vue-inject';
 
-export default function ConfigReaderService() {
+export default function ConfigReaderService(axios) {
     return {
         async getEnvironment() {
             var configuration = await axios.get("configuration.json");
@@ -45,3 +45,4 @@ export default function ConfigReaderService() {
         }
     }
 }
+injector.service('ConfigReaderService', ['axios'], ConfigReaderService);
