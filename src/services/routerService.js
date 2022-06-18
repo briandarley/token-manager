@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+/* eslint-disable no-unused-vars */
+import { createRouter, createWebHistory,createWebHashHistory } from 'vue-router'
 import { routes } from '../router/routes';
 import injector from 'vue-inject';
 
@@ -8,7 +9,7 @@ export default function RouterService() {
             if (this._router) this._router;
 
             this._router = createRouter({
-                history: createWebHashHistory(process.env.BASE_URL),
+                history: createWebHistory(process.env.BASE_URL),
                 routes
             });
 

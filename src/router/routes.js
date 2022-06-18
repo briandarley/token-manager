@@ -1,9 +1,15 @@
-import HomePage from '../components/views/HomePage';
-import BootstrpLayout from '../components/views/BootstrapLayout';
-
-
+import HomePage from '../views/HomePage';
+import BootstrpLayout from '../views/BootstrapLayout';
+import ClientsView from '../views/clientsView';
+import ApiResourcesView from '../views/apiResourcesView'
+import TokensView from '../views/tokensView';
+import ClientEditView from '../views/clientEditView';
 export const routes = [
-    {path: '/', component: HomePage},
-    {path: '/bootstrap', component: BootstrpLayout}
+    {name: 'home', path: '/', component: HomePage},
+    {name: 'bootstrap', path: '/bootstrap', component: BootstrpLayout},
+    {name: 'clients', path: '/clients', component: ClientsView},
+    {name: 'client-edit', path: '/client/:id', component: ClientEditView},
+    {name: 'api-resources', path: '/api-resources', component: ApiResourcesView},
+    {name: 'tokens', path: '/tokens', component: TokensView},
     
 ];

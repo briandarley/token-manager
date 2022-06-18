@@ -4,4 +4,4 @@ export default function {{pascalCase name}}() {
 
     }
 }
-injector.service('{pascalCase name}', {pascalCase name})
+injector.service('{{pascalCase name}}', {{pascalCase name}})

@@ -49,7 +49,7 @@
   }
 
   .card-message {
-    padding: 20px;
+    padding: 5px 20px;
     font-size: 1.1em;
     font-weight: 400;
   }
@@ -62,7 +62,6 @@
 
   svg {
     circle {
-      //stroke: $info;
       fill: lighten($info, 30%);
     }
   }

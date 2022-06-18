@@ -1,6 +1,9 @@
 //Color contrast picker
 //https://learnui.design/tools/accessible-color-generator.html
-
+$sm-width: 576px;
+$md-width: 768px;
+$lg-width: 992px;
+$xl-width: 1200px;
 $fa-font-path: "~fontawesome-free/webfonts";
 $icon-font-path: "~bootstrap-icons/font/fonts";
 @import "variables";
@@ -65,7 +68,9 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
 //     "athletics-navy": $athletics-navy,
 //     "carolina": $carolina-blue,
 //   ) ;
-
+.strong {
+  font-weight: bold;;
+}
 .btn-info {
   color: $white;
 }
@@ -79,4 +84,17 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
     background: $light-blue;
   }
 }
-
+.go-back {
+  display:flex;
+  align-items: center;
+  i {
+    margin-right: 5px;  
+  }
+  
+  
+  color: $carolina-blue;
+  :hover{
+    text-decoration: none;
+    color: $carolina-blue;
+  }
+}

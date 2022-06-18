@@ -15,7 +15,9 @@
     "jquery": "^3.6.0",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.1",
-    "vue": "^3.2.13"
+    "vee-validate": "^4.5.11",
+    "vue": "^3.2.13",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -31,6 +33,7 @@
     "node-polyfill-webpack-plugin": "^1.1.4",
     "node-sass": "^7.0.1",
     "sass-loader": "^13.0.0",
+    "validator": "^13.7.0",
     "vue-inject": "^2.1.1",
     "vue-router": "^4.0.15"
   },

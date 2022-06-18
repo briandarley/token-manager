@@ -1,39 +1,44 @@
 <template>
-  <div>
-    {{ environment }}
+
+  <AppStart v-if="userName == 'none' || !userName"></AppStart>
+  
+  <div class="container" v-else>
+    <TopNav></TopNav>
+    <router-view></router-view>
   </div>
-  <AppStart></AppStart>
-  <router-view></router-view>
+  
 </template>
 
 <script>
-import AppStart from "./components/views/AppStart";
+import AppStart from "./views/AppStart";
 
 export default {
   name: "App",
   components: { AppStart },
-  dependencies: ["ConfigReaderService"],
+  dependencies: ["ConfigReaderService", "UserProfileService"],
 
   setup() {},
   created() {},
 
   data() {
     return {
-      environment: "none",
+      //environment: "none",
+      userName: "none",
       configReaderService: null,
     };
   },
   async mounted() {
     this.initialize();
     
+    
   },
   methods: {
+    
     async initialize() {
-      this.environment = await this.getConfiguration();
-    },
-    async getConfiguration() {
-      return await this.ConfigReaderService.getEnvironment();
-    },
+      //this.environment = await this.ConfigReaderService.getEnvironment();
+      this.userName = await this.UserProfileService.getUserName();
+    }
+    
   },
 };
 </script>

@@ -13,12 +13,12 @@
   <script type="text/javascript">
   
    var userManager = new Oidc.UserManager();
+   
    userManager.clearStaleState(null).then(function() {
-
+    
      userManager.signinRedirectCallback()
      .then(function () {
        var callBack = "call-back.html";
-       
        var index = window.location.href.toLowerCase().indexOf(callBack)
         window.location = window.location.href.substring(0, index);
        })
@@ -28,6 +28,7 @@
           var index = window.location.href.toLowerCase().indexOf(callBack)
           window.location = window.location.href.substring(0, index);
          }
+         //same site error when on localhost "ErrorResponse: login_required" etc
          console.error(e);
        });
    });
