@@ -1,34 +1,72 @@
+/* eslint-disable no-debugger */
 import injector from 'vue-inject';
-export default function ClientsService() {
+export default function ClientService(httpHandlerService, commonExtensions) {
     return {
         async getClients() {
-            return [
-                {
-                    id:0,
-                    name: "self-service-client",
-                    grantTypes: ['implicit']
+            try {
+                const handler = await httpHandlerService.get();
 
-                },
-                {
-                    id:1,
-                    name: "INTERNAL_API",
-                    grantTypes: ['client_credentials']
+                let request = await handler.get(`identity-server/clients`);
 
-                },
-                {
-                    id:2,
-                    name: "mvc",
-                    grantTypes: ['authorization_code']
-
-                },
-                {
-                    id:3,
-                    name: "PHISHING_API",
-                    grantTypes: ['client_credentials']
-
+                return request.data;
+            } catch (error) {
+                if (error.message.includes("404")) {
+                    return {
+                        status: false,
+                    };
                 }
-            ]
+                throw error;
+            }
+
+
+        },
+        async getClient(criteria) {
+            try {
+                const handler = await httpHandlerService.get();
+
+                let queryParams = commonExtensions.convertToQueryParams(criteria);
+
+                let request = await handler.get(`identity-server/clients?${queryParams}`);
+
+                return request.data;
+            } catch (error) {
+                if (error.message.includes("404")) {
+                    return {
+                        status: false,
+                    };
+                }
+                throw error;
+            }
+
+        },
+        async addUpdateClient(model) {
+            try {
+                const handler = await httpHandlerService.get();
+
+                if (!model.id) {
+                    let request = await handler.post(`identity-server/clients`, model);
+                    httpHandlerService.clearCache();
+                    return request.data;
+                }
+
+                let request = await handler.put(`identity-server/clients/${model.id}`, model);
+                
+                return request.data;
+
+
+
+            }
+            catch (error) {
+
+                if (error.message.includes("404"))
+                    throw "Not found"
+                else if (error.response && error.response.data.message)
+                    throw error.response.data.message
+
+                throw error;
+            }
         }
+
     }
 }
-injector.service('ClientsService', ClientsService)
+injector.service('ClientService', ['HttpHandlerService', 'CommonExtensions'], ClientService)

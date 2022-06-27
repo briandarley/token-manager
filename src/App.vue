@@ -5,6 +5,8 @@
   <div class="container" v-else>
     <TopNav></TopNav>
     <router-view></router-view>
+    <SpinnerControl></SpinnerControl>
+    <ToastMessage></ToastMessage>
   </div>
   
 </template>

@@ -3,7 +3,13 @@
 import { createApp } from 'vue'
 import injector from 'vue-inject';
 import App from './App.vue'
-import { ConfirmDialog, TopNav, InfoCard } from './components/index';
+import { 
+    ConfirmDialog, 
+    TopNav, 
+    InfoCard, 
+    SpinnerControl,
+    ToastMessage,
+    BsTextField  } from './components/index';
 import { Field, Form, ErrorMessage } from 'vee-validate';
 
 import IocContainerService from './services/iocContainerService';
@@ -36,6 +42,9 @@ iocContainerService
         app.component("Field", Field);
         app.component("Form", Form);
         app.component("ErrorMessage", ErrorMessage);
+        app.component("SpinnerControl",SpinnerControl)
+        app.component("ToastMessage",ToastMessage)
+        app.component("BsTextField",BsTextField)
         app.mount('#app');
 
     });

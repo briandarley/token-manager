@@ -17,69 +17,51 @@ export default function ValidationService() {
         },
         clientSchema() {
             const nullOrInt = yup
-            .number()
-            .integer("Must be an integer")
-            .typeError("Must be a valid number")
-            .min(0, 'Min value is 0.')
-            .nullable()
-            .transform((value, originalValue) => (String(originalValue).trim() === '' ? null : value));
+                .number()
+                .integer("Must be an integer")
+                .typeError("Must be a valid number")
+                .min(0, 'Min value is 0.')
+                .nullable()
+                .transform((value, originalValue) => (String(originalValue).trim() === '' ? null : value));
 
-            return yup.object().shape({
+            //const requiredString = yup.string().typeError('Required Field')
+            const stringFields = [
+                "clientId"
+                , "clientName"
+                , "protocolType"
+                , "clientClaimsPrefix"
+            ];
+            const numberFields = [
+                 "accessTokenLifetime"
+                , "slidingRefreshTokenLifetime"
+                , "absoluteRefreshTokenLifetime"
+               , "identityTokenLifetime"
+                , "authorizationCodeLifetime"
 
+            ];
+            const nullOrIntFields = [
+                "deviceCodeLifetime"
+                ,"accessTokenType"
+                ,"refreshTokenUsage"
+                ,"refreshTokenExpiration"
+                ,"consentLifetime"
+            ]
 
-                clientId: yup.string().required('Client Id Required'),
-                clientName: yup.string().required('Client Name Required'),
-                description: yup.string(),
-                clientUri: yup.string(),
-                logoUri: yup.string(),
-                protocolType: yup.string().required('Protocol Type Required'),
-                frontChannelLogoutUri: yup.string(),
-                backChannelLogoutUri: yup.string(),
-                clientClaimsPrefic: yup.string(),
-                pairWiseSubjectSalt: yup.string(),
-                userSsoLifetime: yup.string(),
-                userCodeType: yup.string(),
-                deviceCodeLifetime: nullOrInt,
+            let validationObject = {
+                description: yup.string().nullable(true).trim(),
+                clientUri: yup.string().nullable(true).trim(),
+                logoUri: yup.string().nullable(true).trim(),
+                frontChannelLogoutUri: yup.string().nullable(true).trim(),
+                backChannelLogoutUri: yup.string().nullable(true).trim(),
+                pairWiseSubjectSalt: yup.string().nullable(true).trim(),
+                userSsoLifetime: nullOrInt,
+                userCodeType: yup.string().nullable(true).trim().notRequired(),
+                
 
-                accessTokenType: yup.number()
-                    .notRequired()   
-                    .typeError("Access token type must be numeric")
-                    .required("Access token type required"),
-                refreshTokenUsage: yup.number()
-                    .notRequired()   
-                    .typeError("Refresh token usage must be numeric")
-                    .required("Refresh token usage required"),
-                refreshTokenExpiration: yup.number()
-                    
-                    .typeError("Refresh token expiration must be numeric")
-                    .required("Refresh token expiration required"),
-                accessTokenLifetime: yup.number()
-                    
-                    .positive("Access token lifetime must be positive")
-                    .typeError("Access token lifetime must be numeric")
-                    .required("Access token lifetime required"),
-                slidingRefreshTokenLifetime: yup.number()
-                    
-                    .positive("Sliding token lifetime must be positive")
-                    .typeError("Sliding token lifetime must be numeric")
-                    .required("Sliding token lifetime required"),
-                absoluteRefreshTokenLifetime: yup.number()
-                    
-                    .positive("Absolute token lifetime must be positive")
-                    .typeError("Absolute token lifetime must be numeric")
-                    .required("Absolute token lifetime required"),
-                identityTokenLifetime: yup.number()
-                    
-                    .positive("Identity token lifetime must be positive")
-                    .typeError("Identity token lifetime must be numeric")
-                    .required("Identity token lifetime required"),
-                authorizationCodeLifetime: yup.number()
-                    .positive("Authorization code lifetime must be positive")
-                    .typeError("Authorization code lifetime must be numeric")
-                    .required("Authorization code lifetime required"),
-                consentLifetime: nullOrInt,
+                
+                
                 enabled: yup.boolean(),
-                requiredClientSecret: yup.boolean(),
+                requireClientSecret: yup.boolean(),
                 requiredConsent: yup.boolean(),
                 allowRememberConsent: yup.boolean(),
                 enableLocalLogin: yup.boolean(),
@@ -94,10 +76,38 @@ export default function ValidationService() {
                 updateAccessTokenClaimsOnRefresh: yup.boolean(),
                 alwaysIncludeUserClaimsInIdToken: yup.boolean(),
                 backChannelLogoutSessionRequired: yup.boolean(),
-
-
-
+            };
+            function getCaseName(field) {
+                return `${field
+                    .replace(/([a-z])([A-Z])/g, '$1 $2')
+                    .replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
+                }`;
+            }
+            stringFields.forEach(item => {
+                let caseFieldName = getCaseName(item);
+                validationObject[item] = yup.string()
+                    .typeError(`${caseFieldName} is a required field`)
+                    .required(`${caseFieldName} is a required field`)
+            });
+            numberFields.forEach(item => {
+                let caseFieldName = getCaseName(item);
+                validationObject[item] = yup.number()
+                .positive(`${caseFieldName} must be positive`)
+                .typeError(`${caseFieldName} must be numeric`)
+                .required(`${caseFieldName} is required`)
             })
+            nullOrIntFields.forEach(item => {
+                let caseFieldName = getCaseName(item);
+                validationObject[item] = yup.number()
+                .integer(`${caseFieldName} must be an integer value`)
+                .typeError(`${caseFieldName} must be numeric`)
+                .min(0, 'Min value is 0.')
+                .nullable()
+                .transform((value, originalValue) => (String(originalValue).trim() === '' ? null : value));
+            })
+            
+            
+            return yup.object().shape(validationObject)
         }
     }
 }

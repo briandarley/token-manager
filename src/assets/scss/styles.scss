@@ -69,7 +69,7 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
 //     "carolina": $carolina-blue,
 //   ) ;
 .strong {
-  font-weight: bold;;
+  font-weight: bold;
 }
 .btn-info {
   color: $white;
@@ -85,16 +85,23 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
   }
 }
 .go-back {
-  display:flex;
+  display: flex;
   align-items: center;
   i {
-    margin-right: 5px;  
+    margin-right: 5px;
   }
-  
-  
+
   color: $carolina-blue;
-  :hover{
+  :hover {
     text-decoration: none;
     color: $carolina-blue;
   }
+
+  [role="alert"] {
+    color: $red;
+  }
+}
+//get rid of annoying lastpass
+form[autocomplete="off"] input[type="text"] {
+  background-position: 150% 50% !important;
 }
