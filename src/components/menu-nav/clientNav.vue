@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav
+    <div
       class="navbar navbar-expand-lg navbar-primary bg-primary rounded"
       aria-label="Client Sub Nav"
     >
@@ -68,7 +68,7 @@
           <!--<div>Additional Info</div>-->
         </div>
       </div>
-    </nav>
+    </div>
   </div>
 </template>
 <script>

@@ -8,6 +8,9 @@ import HttpHandlerService from './httpHandlerService';
 import CommonExtensions from './commonExtensions';
 import SpinnerService from './spinnerService';
 import ToastService from './toastService';
+import ApiResourceService from './apiResourceService';
+import ApiScopesService from './apiScopesService';
+import TokenService from './tokenService';
 export {
     ConfigReaderService
     , UserProfileService
@@ -19,4 +22,7 @@ export {
     , CommonExtensions
     , SpinnerService
     , ToastService
+    , ApiResourceService 
+    ,ApiScopesService 
+    ,TokenService
 };

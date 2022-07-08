@@ -1,23 +1,42 @@
 /* eslint-disable no-unused-vars */
 import HomePage from '../views/HomePage';
 import BootstrpLayout from '../views/BootstrapLayout';
-import ClientsView from '../views/clientsView';
-import ApiResourcesView from '../views/apiResourcesView'
+import ClientsParentView from '../views/clientsParentView';
+import ApiResourceParentView from '../views/apiResourceParentView'
 import TokensView from '../views/tokensView';
-import ClientView from '../views/clientEdit/clientView';
-import ClientEditView from '../views/clientEdit/clientEditView';
-import ClientSecretsView from '../views/clientEdit/clientSecretsView';
-import ClientScopesView from '../views/clientEdit/clientScopesView';
-import ClientCorsView from '../views/clientEdit/clientCorsView';
-import ClientGrantTypesView from '../views/clientEdit/clientGrantTypesView';
-import ClientRedirectsView from '../views/clientEdit/clientRedirectsView';
-import ClientClaimsView from '../views/clientEdit/clientClaimsView';
-import ClientPropertiesView from '../views/clientEdit/clientPropertiesView';
-import ClientRestrictionsView from '../views/clientEdit/clientRestrictionsView';
+import ClientTokensView from '../views/tokens/clientTokensView';
+import ApiScopesParentView from '../views/apiScopesParentView';
+import {
+    ClientView
+    ,ClientEditView
+    ,ClientSecretsView
+    ,ClientScopesView
+    ,ClientRestrictionsView
+    ,ClientRedirectsView
+    ,ClientPropertiesView
+    ,ClientGrantTypesView
+    ,ClientCorsView
+    ,ClientClaimsView
+} from '../views/clientEdit/index';
+import {
+    ApiScopesView 
+    ,ApiScopeEditView
+    ,ApiScopeClaimsView
+    ,ApiScopePropertiesView 
+} from '../views/apiScopes/index';
+import {
+      ApiResourceView
+    , ApiResourceEditView
+    , ApiResourceClaimsView
+    , ApiResourcePropertiesView
+    , ApiResourceScopesView
+    , ApiResourceSecretsView
+} from '../views/apiResources/index';
+
 export const routes = [
     { name: 'home', path: '/', component: HomePage },
     { name: 'bootstrap', path: '/bootstrap', component: BootstrpLayout },
-    { name: 'clients', path: '/clients', component: ClientsView },
+    { name: 'clients', path: '/clients', component: ClientsParentView },
     {
         props:true,
         name: 'client', 
@@ -68,17 +87,69 @@ export const routes = [
         ]
     },
 
-    // {
-    //     name: 'client-edit', path: '/client/:id?', component: ClientEditView
-    // },
-    //{ name: 'client-secrets', path: '/client/:id/secrets', component: ClientSecretsView },
-    //{ name: 'client-scopes', path: '/client/:id/scopes', component: ClientScopesView },
-    //{ name: 'client-cors', path: '/client/:id/cors', component: ClientCorsView },
-    //{ name: 'client-grant-types', path: '/client/:id/grant-types', component: ClientGrantTypesView },
-    //{ name: 'client-redirects', path: '/client/:id/redirects', component: ClientRedirectsView },
-    //{ name: 'client-claims', path: '/client/:id/claims', component: ClientClaimsView },
-    //{ name: 'client-properties', path: '/client/:id/properties', component: ClientPropertiesView },
-    { name: 'api-resources', path: '/api-resources', component: ApiResourcesView },
-    { name: 'tokens', path: '/tokens', component: TokensView },
+    
+    { name: 'api-resources', path: '/api-resources', component: ApiResourceParentView },
+    
+    {
+        props:true,
+        name: 'api-resource', 
+        path: '/api-resource/:id?', 
+        component: ApiResourceView,
+        redirect: {
+            name: 'api-resource.edit'
+        },
+        children: [
+            {
+                alias: '',
+                path: '',
+                name: 'api-resource.edit',
+                component: ApiResourceEditView
+            },
+            {
+                path: 'secrets',
+                component: ApiResourceSecretsView
+            },
+            {
+                path: 'scopes',
+                component: ApiResourceScopesView
+            },
+            {
+                path: 'claims',
+                component: ApiResourceClaimsView
+            },
+            {
+                path: 'properties',
+                component: ApiResourcePropertiesView
+            }
+        ]
+    },
+    {name: 'api-scopes', path: '/api-scopes', component: ApiScopesParentView },
+    {
+        props:true,
+        name: 'api-scope', 
+        path: '/api-scope/:id?', 
+        component: ApiScopesView,
+        redirect: {
+            name: 'api-scope.edit'
+        },
+        children: [
+            {
+                alias: '',
+                path: '',
+                name: 'api-scope.edit',
+                component: ApiScopeEditView
+            },
+            {
+                path: 'claims',
+                component: ApiScopeClaimsView
+            },
+            {
+                path: 'properties',
+                component: ApiScopePropertiesView
+            }
+            
+        ]
+    },
+    { name: 'tokens', path: '/tokens', component: ClientTokensView  },
 
 ];

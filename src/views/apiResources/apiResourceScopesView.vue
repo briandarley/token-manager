@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h1>Client Restrictions</h1>
+    <h1>Api Resource Scopes</h1>
 
     <table class="table table-condensed">
       <thead class="thead-primary">
         <tr>
           <th scope="col">Id</th>
-          <th scope="col">Provider</th>
+          <th scope="col">Scope</th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="entity in entities" :key="entity.id">
           <td>{{ entity.id }}</td>
-          <td>{{ entity.provider }}</td>
+          <td>{{ entity.scope }}</td>
           <td>
             <a href="#" @click.prevent="deleteEntity(entity)">delete</a>
           </td>
@@ -22,39 +22,37 @@
     </table>
     <Form
       @submit="onSubmit"
-      :validation-schema="clientRestrictionsSchema"
+      :validation-schema="clientScopesSchema"
       autocomplete="off"
       ref="form"
     >
       <div class="card">
-        <div class="card-header">Add Client Restriction</div>
+        <div class="card-header">Add Api Resource Scope</div>
         <div class="card-body">
           <div class="d-flex align-content-between">
             <div class="form-group">
-              <label for="provider" class="form-label"
-                >Client Idp Restrictions</label
-              >
+              <label for="scope" class="form-label">Scope</label>
+
               <Field
-                id="provider"
-                name="provider"
-                class="form-select"
+                id="scope"
+                name="scope"
                 as="select"
-                v-model="model.provider"
+                class="form-select"
+                v-model="model.scope"
               >
-                <option value="google">Google</option>
-                <option value="microsoft">Microsoft</option>
-                <option value="microsoft">Instagram</option>
-                <option value="aws">Amazon Web Service</option>
-                <option value="facebook">Facebook</option>
+                <option v-for="item in scopes" :key="item.name" :value="item.name">
+                  {{item.name}}
+                </option>
               </Field>
-              <ErrorMessage name="provider" class="form-text" />
+
+              <ErrorMessage name="scope" class="form-text" />
             </div>
           </div>
         </div>
       </div>
       <div class="d-flex justify-content-end submit-button">
         <button class="btn btn-primary" type="submit" :disabled="!isValid">
-          Add Client Idp Restriction
+          Add API Resource Scope
         </button>
         <button class="btn btn-secondary" type="button" @click="reset">
           Reset
@@ -64,12 +62,13 @@
   </div>
 </template>
 <script>
-import "bootstrap-datepicker";
+
 
 export default {
   dependencies: [
     "ValidationService",
-    "ClientService",
+    "ApiResourceService",
+    "ApiScopesService",
     "ToastService",
     "SpinnerService",
   ],
@@ -78,31 +77,53 @@ export default {
   },
   async mounted() {
     this.setProperties();
-
+    
     await this.loadModel();
+    await this.loadAvailableScopes();
   },
   data() {
     return {
-      clientId: null,
+      apiResourceId: null,
       entities: [],
+      scopes: [],
       emptyModel: {
-        provider: "",
+        scope: "",
       },
       model: {},
     };
   },
   methods: {
     setProperties() {
-      this.clientId = this.$route.params.id;
+      this.apiResourceId = this.$route.params.id;
+    },
+    async loadAvailableScopes() {
+      try {
+        this.SpinnerService.show();
+
+        let scopes = await this.ApiScopesService.getApiScopes();
+        
+        if(!this.isNew){
+          scopes = scopes.filter(c=> !this.entities.some(d=> d.scope == c.name))
+        }
+      
+        this.scopes = scopes;
+        
+      } catch (error) {
+        this.ToastService.error(error);
+      } finally {
+        this.SpinnerService.hide();
+      }
     },
     async loadModel() {
       if (this.isNew) return;
       try {
         this.SpinnerService.show();
-        let client = await this.ClientService.getClient({ id: this.clientId });
-        client = client[0];
+        let apiResource = await this.ApiResourceService.getApiResource({
+          id: this.apiResourceId,
+        });
+        apiResource = apiResource[0];
 
-        this.entities = client.identityProviderRestrictions;
+        this.entities = apiResource.apiResourceScopes;
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -110,7 +131,7 @@ export default {
       }
     },
     validateForm() {
-      return this.clientRestrictionsSchema.validate(this.model, {
+      return this.clientScopesSchema.validate(this.model, {
         abortEarly: false,
       });
     },
@@ -121,10 +142,10 @@ export default {
     async deleteEntity(entity) {
       try {
         this.SpinnerService.show();
-        await this.ClientService.deleteClientRestriction(entity);
+        await this.ApiResourceService.deleteApiResourceScope(entity);
         await this.loadModel();
         await this.reset();
-        this.ToastService.success("Successfully Deleted Provider");
+        this.ToastService.success("Successfully Deleted Scope");
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -134,12 +155,12 @@ export default {
     async onSubmit(values) {
       try {
         this.SpinnerService.show();
-        values.clientId = this.clientId;
-        await this.ClientService.addClientRestriction(values);
+        values.apiResourceId = this.apiResourceId;
+        await this.ApiResourceService.addUpdateApiResourceScope(values);
         await this.loadModel();
         await this.reset();
 
-        this.ToastService.success("Successfully Added Provider");
+        this.ToastService.success("Successfully Added New Scope");
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -148,16 +169,15 @@ export default {
     },
   },
   computed: {
-    clientRestrictionsSchema() {
-      return this.ValidationService.clientRestrictionsSchema();
+    clientScopesSchema() {
+      return this.ValidationService.clientScopesSchema();
     },
     isNew() {
-      return !this.clientId;
+      return !this.apiResourceId;
     },
     isValid() {
-      // eslint-disable-next-line no-unreachable
       try {
-        this.clientRestrictionsSchema.validateSync(this.model);
+        this.clientScopesSchema.validateSync(this.model);
         return true;
       } catch {
         //ignore

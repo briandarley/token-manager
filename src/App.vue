@@ -38,6 +38,11 @@ export default {
     
     async initialize() {
       //this.environment = await this.ConfigReaderService.getEnvironment();
+      let user = await this.UserProfileService.getUser();
+      if(!user || user.expired){
+
+        return;
+      }
       this.userName = await this.UserProfileService.getUserName();
     }
     

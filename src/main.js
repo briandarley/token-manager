@@ -9,7 +9,8 @@ import {
     InfoCard, 
     SpinnerControl,
     ToastMessage,
-    BsTextField  } from './components/index';
+    BsTextField,
+DatePicker  } from './components/index';
 import { Field, Form, ErrorMessage } from 'vee-validate';
 
 import IocContainerService from './services/iocContainerService';
@@ -45,6 +46,7 @@ iocContainerService
         app.component("SpinnerControl",SpinnerControl)
         app.component("ToastMessage",ToastMessage)
         app.component("BsTextField",BsTextField)
+        app.component("DatePicker", DatePicker)
         app.mount('#app');
 
     });

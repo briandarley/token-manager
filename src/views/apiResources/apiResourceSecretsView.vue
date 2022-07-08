@@ -1,22 +1,24 @@
 <template>
   
   <div>
-    <h1>Client Properties</h1>
+    <h1>API Resource Secrets</h1>
 
     <table class="table table-condensed">
       <thead class="thead-primary">
         <tr>
           <th scope="col">Id</th>
-          <th scope="col">Key</th>
-          <th scope="col">Value</th>
+          <th scope="col">Description</th>
+          <th scope="col">Created</th>
+          <th scope="col">Expiration</th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="entity in entities" :key="entity.id">
           <td>{{ entity.id }}</td>
-          <td>{{ entity.key }}</td>
-          <td>{{ entity.value }}</td>
+          <td>{{ entity.description }}</td>
+          <td>{{ entity.created }}</td>
+          <td>{{ entity.expiration }}</td>
           <td>
             <a href="#" @click.prevent="deleteEntity(entity)">delete</a>
           </td>
@@ -25,39 +27,58 @@
     </table>
     <Form
       @submit="onSubmit"
-      :validation-schema="clientPropertiesSchema"
+      :validation-schema="clientSecretsSchema"
       autocomplete="off"
       ref="form"
     >
       <div class="card">
-        <div class="card-header">Add Client Property</div>
+        <div class="card-header">Add Resource Secret</div>
         <div class="card-body">
           <div class="d-flex align-content-between">
             <div class="form-group">
-              <label for="key" class="form-label">Key</label>
-              <Field
-                id="key"
-                name="key"
-                type="text"
-                class="form-control"
-                v-model="model.key"
-              />
-              <ErrorMessage name="key" class="form-text" />
-            </div>
-            
-          </div>
-          <div class="d-flex align-content-between">
-            <div class="form-group">
-              <label for="value" class="form-label">Value</label>
+              <label for="value" class="form-label">Secret</label>
               <Field
                 id="value"
                 name="value"
-                type="text"
+                type="password"
                 class="form-control"
                 v-model="model.value"
               />
               <ErrorMessage name="value" class="form-text" />
             </div>
+            <div class="form-group confirm-secret">
+              <label for="confirmSecret" class="form-label"
+                >Confirm Secret</label
+              >
+              <Field
+                id="confirmSecret"
+                name="confirmSecret"
+                type="password"
+                class="form-control"
+                v-model="model.confirmSecret"
+              />
+              <ErrorMessage name="confirmSecret" class="form-text" />
+            </div>
+            <DatePicker
+              class="flex-fill"
+              name="expiration"
+              label="Expiration"
+              v-model="model.expiration"
+            ></DatePicker>
+          </div>
+          <div class="d-flex align-content-between">
+            <div class="form-group flex-fill">
+              <label for="description" class="form-label">Description</label>
+              <Field
+                id="description"
+                name="description"
+                type="text"
+                class="form-control"
+                v-model="model.description"
+              />
+              <ErrorMessage name="description" class="form-text" />
+            </div>
+
             
           </div>
         </div>
@@ -65,7 +86,7 @@
       <div class="d-flex justify-content-end submit-button">
         
         <button class="btn btn-primary" type="submit" :disabled="!isValid">
-          Add Client Property
+          Add Secret
         </button>
         <button class="btn btn-secondary" type="button" @click="reset">
           Reset
@@ -84,7 +105,7 @@ import "bootstrap-datepicker";
 export default {
   dependencies: [
     "ValidationService",
-    "ClientService",
+    "ApiResourceService",
     "ToastService",
     "SpinnerService",
   ],
@@ -98,27 +119,29 @@ export default {
   },
   data() {
     return {
-      clientId: null,
+      apiResourceId: null,
       entities: [],
       emptyModel: {
-        type: "",
+        description: "",
         value: "",
+        confirmSecret: null,
+        expiration: "01/01/1970",
       },
       model: {},
     };
   },
   methods: {
     setProperties() {
-      this.clientId = this.$route.params.id;
+      this.apiResourceId = this.$route.params.id;
     },
     async loadModel() {
       if (this.isNew) return;
       try {
         this.SpinnerService.show();
-        let client = await this.ClientService.getClient({ id: this.clientId });
-        client = client[0];
+        let entity = await this.ApiResourceService.getApiResource({ id: this.apiResourceId });
+        entity = entity[0];
         
-        this.entities = client.properties;
+        this.entities = entity.apiResourceSecrets;
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -126,7 +149,7 @@ export default {
       }
     },
     validateForm() {
-      return this.clientPropertiesSchema.validate(this.model, {
+      return this.clientSecretsSchema.validate(this.model, {
         abortEarly: false,
       });
     },
@@ -137,10 +160,10 @@ export default {
     async deleteEntity(entity) {
       try {
         this.SpinnerService.show();
-        await this.ClientService.deleteClientProperty(entity);
+        await this.ApiResourceService.deleteApiResourceSecret(entity);
         await this.loadModel();
         await this.reset();
-        this.ToastService.success("Successfully Deleted Client Property");
+        this.ToastService.success("Successfully Deleted Secret");
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -151,12 +174,12 @@ export default {
       
       try {
         this.SpinnerService.show();
-        values.clientId = this.clientId;
-        await this.ClientService.addClientProperty(values);
+        values.apiResourceId = this.apiResourceId;
+        await this.ApiResourceService.addUpdateApiResourceSecret(values);
         await this.loadModel();
         await this.reset();
 
-        this.ToastService.success("Successfully Added New Client Property");
+        this.ToastService.success("Successfully Added New Secret");
       } catch (error) {
         this.ToastService.error(error);
       } finally {
@@ -165,16 +188,16 @@ export default {
     },
   },
   computed: {
-    clientPropertiesSchema() {
-      return this.ValidationService.clientPropertiesSchema();
+    clientSecretsSchema() {
+      return this.ValidationService.clientSecretsSchema();
     },
     isNew() {
-      return !this.clientId;
+      return !this.apiResourceId;
     },
     isValid() {
       
       try {
-        this.clientPropertiesSchema.validateSync(this.model);
+        this.clientSecretsSchema.validateSync(this.model);
         return true;
       } catch {
         //ignore

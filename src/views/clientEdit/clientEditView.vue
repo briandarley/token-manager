@@ -328,6 +328,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.enabled"
         />
 
@@ -343,6 +344,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.requireClientSecret"
         />
         <ErrorMessage name="requireClientSecret" class="form-text" />
@@ -357,6 +359,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.requireConsent"
         />
         <ErrorMessage name="requireConsent" class="form-text" />
@@ -371,6 +374,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.allowRememberConsent"
         />
         <ErrorMessage name="allowRememberConsent" class="form-text" />
@@ -388,6 +392,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.enableLocalLogin"
         />
         <ErrorMessage name="enableLocalLogin" class="form-text" />
@@ -402,6 +407,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.includeJwtId"
         />
         <ErrorMessage name="includeJwtId" class="form-text" />
@@ -416,6 +422,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.alwaysSendClientClaims"
         />
         <ErrorMessage name="alwaysSendClientClaims" class="form-text" />
@@ -430,6 +437,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.allowAccessTokensViaBrowser"
         />
         <ErrorMessage name="allowAccessTokensViaBrowser" class="form-text" />
@@ -444,6 +452,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.nonEditable"
         />
         <ErrorMessage name="nonEditable" class="form-text" />
@@ -458,6 +467,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.allowOfflineAccess"
         />
         <ErrorMessage name="allowOfflineAccess" class="form-text" />
@@ -470,6 +480,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.requirePkce"
         />
         <ErrorMessage name="requirePkce" class="form-text" />
@@ -484,6 +495,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.allowPlainTextPkce"
         />
         <ErrorMessage name="allowPlainTextPkce" class="form-text" />
@@ -500,6 +512,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.frontChannelLogoutSessionRequired"
         />
         <ErrorMessage
@@ -517,6 +530,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.updateAccessTokenClaimsOnRefresh"
         />
         <ErrorMessage
@@ -536,6 +550,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.alwaysIncludeUserClaimsInIdToken"
         />
         <ErrorMessage
@@ -553,6 +568,7 @@
           type="checkbox"
           class="form-check-input"
           :value="true"
+          :unchecked-value="false"
           v-model="model.backChannelLogoutSessionRequired"
         />
         <ErrorMessage
@@ -589,7 +605,6 @@ export default {
   },
   data() {
     return {
-      validationResult: null,
       clientId: null,
       emptyModel: {
         created: "",
@@ -641,16 +656,6 @@ export default {
     };
   },
   methods: {
-    validateForm() {
-      return this.clientSchema.validate(this.model, { abortEarly: false });
-    },
-    async reset() {
-      if (this.isNew) {
-        this.model = JSON.parse(JSON.stringify(this.emptyModel));
-      } else {
-        await this.loadModel();
-      }
-    },
     setProperties() {
       this.clientId = this.$route.params.id;
     },
@@ -667,14 +672,30 @@ export default {
         this.SpinnerService.hide();
       }
     },
+    validateForm() {
+      return this.clientSchema.validate(this.model, { abortEarly: false });
+    },
+    async reset() {
+      if (this.isNew) {
+        this.model = JSON.parse(JSON.stringify(this.emptyModel));
+      } else {
+        await this.loadModel();
+      }
+    },
+    
+    
     async onSubmit(values) {
       
       try {
         this.SpinnerService.show();
+        
+        // eslint-disable-next-line no-unreachable
         values.id = this.clientId;
 
         await this.ClientService.addUpdateClient(values);
 
+        await this.loadModel();
+        
         this.ToastService.success("Successfully Saved");
       } catch (error) {
         this.ToastService.error(error);

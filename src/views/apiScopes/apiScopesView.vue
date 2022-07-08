@@ -1,50 +1,49 @@
-
 <template>
   <div>
-    <ClientNav></ClientNav>
-    
-    <h1 v-if="clientId">{{ clientId }}</h1>
-    <h1 v-else>New Client</h1>
+    <ApiScopesNav></ApiScopesNav>
+    <h1 v-if="name">{{ name }}</h1>
+    <h1 v-else>New API Scope</h1>
     <router-view></router-view>
   </div>
 </template>
 <script>
-/* eslint-disable no-debugger */
-import ClientNav from "../../components/menu-nav/clientNav.vue";
+import ApiScopesNav from "../../components/menu-nav/apiScopesNav.vue";
 export default {
-  components: { ClientNav },
-  dependencies: ["ClientService", "SpinnerService","ToastService"],
+  components: { ApiScopesNav },
+  dependencies: ["ApiScopesService", "SpinnerService", "ToastService"],
 
   async mounted() {
     await this.initializeView();
   },
   data() {
     return {
-      clientId: null,
+      apiScopeId: null,
+      name: null,
     };
   },
   methods: {
     setProperties() {
       if (this.$route.params.id) {
-        this.clientId = this.$route.params.id;
+        this.apiScopeId = this.$route.params.id;
       }
     },
-    async loadClient() {
-      if (!this.clientId) return;
+    async loadApiScope() {
+      if (!this.apiScopeId) return;
 
-      let request = await this.ClientService.getClient({
-        id: this.clientId,
+      let request = await this.ApiScopesService.getApiScope({
+        id: this.apiResourceId,
       });
-      let client = request[0];
-      this.clientId = client.clientId;
+      let apiScope = request[0];
+      this.apiScopeId = apiScope.id;
+      this.name = apiScope.name;
     },
     async initializeView() {
       this.setProperties();
-      
+
       try {
         this.SpinnerService.show();
 
-        await this.loadClient();
+        await this.loadApiScope();
       } catch (error) {
         this.ToastService.error(error);
       } finally {

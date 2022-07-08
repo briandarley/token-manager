@@ -10,7 +10,7 @@ export default function HttpHandlerService(axios, ConfigReaderService, UserProfi
 
             const user = await UserProfileService.getUser();
 
-            if (user == null) {
+            if (user == null || user.expired) {
                 return null;
             }
 

@@ -108,7 +108,100 @@ export default function ValidationService() {
             
             
             return yup.object().shape(validationObject)
-        }
+        },
+        clientSecretsSchema() {
+            let validationObject = {
+                value: yup.string().required('Secret is required'),
+                confirmSecret: yup.string()
+                   .oneOf([yup.ref('value'), null], 'Secrets must match'),
+                descriptions: yup.string().nullable(true).trim(),
+                expiration: yup.string()
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientScopesSchema() {
+            let validationObject = {
+                scope: yup.string().trim().required('Scope is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientCorsSchema() {
+            let validationObject = {
+                origin: yup.string().trim().required('Origin is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientGrantTypeSchema() {
+            let validationObject = {
+                grantType: yup.string().trim().required('Grant type is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientRedirectUriSchema() {
+            let validationObject = {
+                redirectUri: yup.string().trim().required('Uri is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientRestrictionsSchema() {
+            let validationObject = {
+                provider: yup.string().trim().required('Provider is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientClaimsSchema() {
+            let validationObject = {
+                type: yup.string().trim().required('Type is required'),
+                value: yup.string().trim().required('Value is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        clientPropertiesSchema() {
+            let validationObject = {
+                key: yup.string().trim().required('Key is required'),
+                value: yup.string().trim().required('Value is required')
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
+        apiResourceSchema() {
+            let validationObject = {
+                enabled: yup.boolean(),
+                name: yup.string().trim().required('Name is required'),
+                displayName: yup.string().trim().nullable(),
+                description: yup.string().trim().nullable(),
+                showInDiscoveryDocument: yup.boolean(),
+                allowedAccessTokenSigningAlgorithms: yup.string().nullable(),
+            }            
+            return yup.object().shape(validationObject)
+        },
+        apiScopeSchema() {
+            let validationObject = {
+                name: yup.string().trim().required('Name is required'),
+                displayName: yup.string().trim().nullable(),
+                description: yup.string().trim().nullable(),
+                required: yup.boolean(),
+                emphasize: yup.boolean(),
+                showInDiscoveryDocument: yup.boolean(),
+                enabled: yup.boolean(),
+
+            }            
+            return yup.object().shape(validationObject)
+        },
+        apiScopeClaimsSchema() {
+            let validationObject = {
+                type: yup.string().trim().required('Type is required'),
+                
+                
+            }            
+            return yup.object().shape(validationObject)
+        },
     }
 }
 injector.service('ValidationService', ValidationService)

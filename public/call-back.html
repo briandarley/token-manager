@@ -2,7 +2,8 @@
 <html>
 
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://selfservice.unc.edu https://its-idmuat-web.ad.unc.edu ">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://selfservice.unc.edu https://its-idmuat-web.ad.unc.edu ">
   <meta charset="utf-8" />
   <title></title>
   <script src="oidc-client.min.js" type="text/javascript"></script>
@@ -11,27 +12,29 @@
 <body>
 
   <script type="text/javascript">
-  
-   var userManager = new Oidc.UserManager();
-   
-   userManager.clearStaleState(null).then(function() {
-    
-     userManager.signinRedirectCallback()
-     .then(function () {
-       var callBack = "call-back.html";
-       var index = window.location.href.toLowerCase().indexOf(callBack)
-        window.location = window.location.href.substring(0, index);
-       })
-       .catch(function (e) {
-         if(e.message === "No state in response"){
-          var callBack = "call-back.html";
-          var index = window.location.href.toLowerCase().indexOf(callBack)
-          window.location = window.location.href.substring(0, index);
-         }
-         //same site error when on localhost "ErrorResponse: login_required" etc
-         console.error(e);
-       });
-   });
+
+    var userManager = new Oidc.UserManager();
+
+    userManager.clearStaleState(null).then(function () {
+
+        userManager.signinRedirectCallback()
+            .then(function () {
+              var callBack = "call-back.html";
+              var index = window.location.href.toLowerCase().indexOf(callBack)
+              window.location = window.location.href.substring(0, index);
+            })
+            .catch(function (e) {
+              if (e.message === "No state in response") {
+                var callBack = "call-back.html";
+                var index = window.location.href.toLowerCase().indexOf(callBack)
+                window.location = window.location.href.substring(0, index);
+              }
+              if(e.message == "login_required") return;
+                            
+              console.error(e);
+            });
+
+    });
   </script>
 </body>
 

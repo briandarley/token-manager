@@ -8,17 +8,20 @@ export default function UserProfileService(ConfigReaderService, LocalStorageServ
     return {
       userManager: null,
       async initialize() {
-
         this.userManager = new Oidc.UserManager(settings);
+        this.userManager.clearStaleState();
         
       },
       async getUserName() {
+        
         let user = await this.getUser();
         if(!user || !user.profile) return null;
+        
         return user.profile.name;
       },
       async getUser() {
-        return await this.userManager.getUser();
+        let user = await this.userManager.getUser();
+        return user ;
       },
       async login() {
         

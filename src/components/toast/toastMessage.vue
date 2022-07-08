@@ -22,7 +22,7 @@
       </button>
     </div>
     <div class="toast-body">
-      <p>{{ message }}</p>
+      <p :class="textColor">{{ message }}</p>
     </div>
   </div>
 </template>
@@ -73,6 +73,18 @@ export default {
           return "button-success";
       }
     },
+    textColor() {
+      switch (this.level) {
+        case "info":
+          return "text-primary";
+        case "warning":
+          return "text-primary";
+        case "danger":
+          return "text-danger";
+        default:
+          return "text-success";
+      }
+    }
   },
   methods: {
     initializeService() {

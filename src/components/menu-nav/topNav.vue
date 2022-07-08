@@ -26,8 +26,10 @@
             <router-link class="nav-link" to="/clients" >Clients</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" to="/api-scopes" >API Scopes</router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link" to="/api-resources" >API Resources</router-link>
-            
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/tokens" >Tokens</router-link>

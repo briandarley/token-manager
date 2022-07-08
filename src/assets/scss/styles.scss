@@ -8,7 +8,7 @@ $fa-font-path: "~fontawesome-free/webfonts";
 $icon-font-path: "~bootstrap-icons/font/fonts";
 @import "variables";
 @import "~bootstrap/scss/functions";
-
+@import '~bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css';
 //custom colors
 $yellow: #ffc107 !default;
 $red: #dc3545 !default;
@@ -100,6 +100,7 @@ $utilities-bg-colors: map-loop($utilities-colors, rgba-css-var, "$key", "bg");
   [role="alert"] {
     color: $red;
   }
+  
 }
 //get rid of annoying lastpass
 form[autocomplete="off"] input[type="text"] {
