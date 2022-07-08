@@ -227,12 +227,12 @@
     </div>
     <div class="d-flex justify-content-between audit-fields">
       <div>
-        <span>Created</span> <span>{{ model.created }}</span>
+        <span>Created</span> <span>{{ formatDate(model.created) }}</span>
       </div>
       <div>
-        <span>Updated</span> <span>{{ model.updated }}</span>
+        <span>Updated</span> <span>{{ formatDate(model.updated) }}</span>
       </div>
-      <span>Last Accessed</span> <span>{{ model.lastAccessed }}</span>
+      <span>Last Accessed</span> <span>{{ formatDate(model.lastAccessed) }}</span>
     </div>
 
     <div class="d-flex justify-content-between">
@@ -594,6 +594,7 @@ export default {
     "ClientService",
     "ToastService",
     "SpinnerService",
+    "SharedFunctions"
   ],
   created() {
     this.model = JSON.parse(JSON.stringify(this.emptyModel));
@@ -705,6 +706,11 @@ export default {
     },
   },
   computed: {
+    formatDate() {
+      return value=> {
+        return this.SharedFunctions.formatDate(value);
+      }
+    },
     clientSchema() {
       return this.ValidationService.clientSchema();
     },

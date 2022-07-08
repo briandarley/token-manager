@@ -69,7 +69,7 @@
       <div class="d-flex">
         <div class="flex-grow-1">
           <input
-            type="text"
+            type="password"
             id="clientSecret"
             class="form-control"
             v-model="model.secret"
@@ -103,6 +103,7 @@
   </div>
 </template>
 <script>
+
 /* eslint-disable no-debugger */
 export default {
   dependencies: [

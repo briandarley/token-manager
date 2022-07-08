@@ -5,9 +5,10 @@
       <template #message>
         <div>
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
-            Provident molestias illum, explicabo inventore accusantium quo repellat 
-            culpa dicta quae ut veritatis corrupti dolorem maiores quaerat sit velit adipisci earum repudiandae.
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident
+            molestias illum, explicabo inventore accusantium quo repellat culpa
+            dicta quae ut veritatis corrupti dolorem maiores quaerat sit velit
+            adipisci earum repudiandae.
           </p>
           <p>
             Examples for clients are web applications, native mobile or desktop
@@ -43,10 +44,11 @@
           <td>{{ entity.id }}</td>
           <td>{{ entity.name }}</td>
           <td>{{ entity.displayName }}</td>
-          <td>
+          <td class="links">
             <router-link :to="{ name: 'api-scope', params: { id: entity.id } }"
               >edit</router-link
             >
+            <a href="#" @click="deleteEntity(entity)">delete</a>
           </td>
         </tr>
       </tbody>
@@ -79,16 +81,31 @@ export default {
         this.SpinnerService.hide();
       }
     },
-    
+    async deleteEntity(entity) {
+      try {
+        this.SpinnerService.show();
+        await this.ApiScopesService.deleteApiScope(entity);
+        this.ToastService.success("Removed Api Scope");
+        await this.initialize();
+      } catch (error) {
+        this.ToastService.error(error);
+      } finally {
+        this.SpinnerService.hide();
+      }
+    },
     goToCreateNewApiScopeView() {
-        this.$router.push({ name: "api-scope" });
-    }
-    
+      this.$router.push({ name: "api-scope" });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .submit-button {
   margin-bottom: 20px;
+}
+.links {
+  a:first-of-type {
+    margin-right: 10px;
+  }
 }
 </style>

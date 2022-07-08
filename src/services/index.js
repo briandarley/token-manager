@@ -11,6 +11,7 @@ import ToastService from './toastService';
 import ApiResourceService from './apiResourceService';
 import ApiScopesService from './apiScopesService';
 import TokenService from './tokenService';
+import SharedFunctions from './sharedFunctions';
 export {
     ConfigReaderService
     , UserProfileService
@@ -25,4 +26,5 @@ export {
     , ApiResourceService 
     ,ApiScopesService 
     ,TokenService
+    ,SharedFunctions
 };

@@ -64,6 +64,25 @@ export default function ApiScopesService(httpHandlerService, commonExtensions) {
                 throw error;
             }
         },
+        async deleteApiScope(model) {
+            try {
+                const handler = await httpHandlerService.get();
+
+                let request = await handler.delete(`identity-server/api-scopes/${model.id}`);
+                httpHandlerService.clearCache();
+                return request.data;
+
+            }
+            catch (error) {
+
+                if (error.message.includes("404"))
+                    throw "Not found"
+                else if (error.response && error.response.data.message)
+                    throw error.response.data.message
+
+                throw error;
+            }
+        },
         async addUpdateApiScopeClaim(model) {
             try {
                 const handler = await httpHandlerService.get();

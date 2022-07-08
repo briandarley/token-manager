@@ -55,10 +55,10 @@
     </div>
     <div class="d-flex justify-content-between audit-fields">
       <div>
-        <span>Created</span> <span>{{ model.created }}</span>
+        <span>Created</span> <span>{{ formatDateTime(model.created) }}</span>
       </div>
       <div>
-        <span>Updated</span> <span>{{ model.updated }}</span>
+        <span>Updated</span> <span>{{ formatDateTime(model.updated) }}</span>
       </div>
     </div>
 
@@ -112,6 +112,7 @@ export default {
     "ApiResourceService",
     "ToastService",
     "SpinnerService",
+    "SharedFunctions"
   ],
   created() {
     this.model = JSON.parse(JSON.stringify(this.emptyModel));
@@ -186,6 +187,11 @@ export default {
     },
   },
   computed: {
+     formatDateTime() {
+      return value=> {
+        return this.SharedFunctions.formatDateTime(value);
+      }
+    },
     apiResourceSchema() {
       return this.ValidationService.apiResourceSchema();
     },

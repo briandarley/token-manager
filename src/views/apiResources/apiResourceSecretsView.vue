@@ -1,5 +1,4 @@
 <template>
-  
   <div>
     <h1>API Resource Secrets</h1>
 
@@ -17,7 +16,7 @@
         <tr v-for="entity in entities" :key="entity.id">
           <td>{{ entity.id }}</td>
           <td>{{ entity.description }}</td>
-          <td>{{ entity.created }}</td>
+          <td>{{ formatDateTime(entity.created) }}</td>
           <td>{{ entity.expiration }}</td>
           <td>
             <a href="#" @click.prevent="deleteEntity(entity)">delete</a>
@@ -78,13 +77,10 @@
               />
               <ErrorMessage name="description" class="form-text" />
             </div>
-
-            
           </div>
         </div>
       </div>
       <div class="d-flex justify-content-end submit-button">
-        
         <button class="btn btn-primary" type="submit" :disabled="!isValid">
           Add Secret
         </button>
@@ -101,13 +97,13 @@
 /* eslint-disable no-unreachable */
 import "bootstrap-datepicker";
 
-
 export default {
   dependencies: [
     "ValidationService",
     "ApiResourceService",
     "ToastService",
     "SpinnerService",
+    "SharedFunctions"
   ],
   created() {
     this.model = JSON.parse(JSON.stringify(this.emptyModel));
@@ -138,9 +134,11 @@ export default {
       if (this.isNew) return;
       try {
         this.SpinnerService.show();
-        let entity = await this.ApiResourceService.getApiResource({ id: this.apiResourceId });
+        let entity = await this.ApiResourceService.getApiResource({
+          id: this.apiResourceId,
+        });
         entity = entity[0];
-        
+
         this.entities = entity.apiResourceSecrets;
       } catch (error) {
         this.ToastService.error(error);
@@ -171,7 +169,6 @@ export default {
       }
     },
     async onSubmit(values) {
-      
       try {
         this.SpinnerService.show();
         values.apiResourceId = this.apiResourceId;
@@ -188,6 +185,11 @@ export default {
     },
   },
   computed: {
+    formatDateTime() {
+      return (value) => {
+        return this.SharedFunctions.formatDateTime(value);
+      };
+    },
     clientSecretsSchema() {
       return this.ValidationService.clientSecretsSchema();
     },
@@ -195,7 +197,6 @@ export default {
       return !this.apiResourceId;
     },
     isValid() {
-      
       try {
         this.clientSecretsSchema.validateSync(this.model);
         return true;

@@ -17,7 +17,7 @@
         <tr v-for="entity in entities" :key="entity.id">
           <td>{{ entity.id }}</td>
           <td>{{ entity.description }}</td>
-          <td>{{ entity.created }}</td>
+          <td>{{ formatDateTime(entity.created) }}</td>
           <td>{{ entity.expiration }}</td>
           <td>
             <a href="#" @click.prevent="deleteEntity(entity)">delete</a>
@@ -108,6 +108,7 @@ export default {
     "ClientService",
     "ToastService",
     "SpinnerService",
+    "SharedFunctions"
   ],
   created() {
     this.model = JSON.parse(JSON.stringify(this.emptyModel));
@@ -187,6 +188,11 @@ export default {
     },
   },
   computed: {
+    formatDateTime() {
+      return value=> {
+        return this.SharedFunctions.formatDateTime(value);
+      }
+    },
     clientSecretsSchema() {
       return this.ValidationService.clientSecretsSchema();
     },
