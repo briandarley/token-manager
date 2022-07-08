@@ -8,7 +8,7 @@
         id="clientId"
         class="form-select"
         v-model="model.clientId"
-        @change="loadScopes"
+        @change="clientIdChanged"
       >
         <option v-for="item in clients" :key="item.clientId">
           {{ item.clientId }}
@@ -68,10 +68,17 @@
       <label for="clientSecret">Client Secret</label>
       <div class="d-flex">
         <div class="flex-grow-1">
-          <input type="text" id="clientSecret" class="form-control" v-model="model.secret" />
+          <input
+            type="text"
+            id="clientSecret"
+            class="form-control"
+            v-model="model.secret"
+          />
         </div>
         <div class="buttons flex-grow-0">
-          <button class="btn btn-primary" @click="createToken">Create Token</button>
+          <button class="btn btn-primary" @click="createToken">
+            Create Token
+          </button>
         </div>
       </div>
     </div>
@@ -83,6 +90,15 @@
         class="form-control"
         v-model="token"
       ></textarea>
+    </div>
+
+    <div class="d-flex justify-content-end submit-button">
+      <button class="btn btn-primary" type="button" @click="copyToken">
+        Copy
+      </button>
+      <button class="btn btn-secondary" type="button" @click="reset">
+        Reset
+      </button>
     </div>
   </div>
 </template>
@@ -96,7 +112,7 @@ export default {
     "ApiScopesService",
     "ToastService",
     "SpinnerService",
-    "TokenService"
+    "TokenService",
   ],
 
   async mounted() {
@@ -111,8 +127,8 @@ export default {
       selectedScopes: [],
       token: "",
       model: {
-        clientId: "PHISHING_API",
-        secret: "password"
+        clientId: "",
+        secret: "",
       },
     };
   },
@@ -127,6 +143,12 @@ export default {
         this.SpinnerService.hide();
       }
     },
+    clientIdChanged() {
+      let clientId = this.model.clientId;
+      this.reset();
+      this.model.clientId = clientId;
+      this.loadScopes();
+    },
     loadScopes() {
       try {
         let clients = this.clients.filter(
@@ -140,7 +162,7 @@ export default {
     addFocusedScope() {
       try {
         if (!this.focusedScope) return;
-        if (this.availableScopes.some(c=> c== this.focusedScope)) return;
+        if (this.availableScopes.some((c) => c == this.focusedScope)) return;
         this.availableScopes.push(this.focusedScope);
       } catch (error) {
         this.ToastService.error(error);
@@ -166,12 +188,32 @@ export default {
     async createToken() {
       //console.log(this.availableScopes.join(","))
       let model = {
-        selectedScopes : this.availableScopes,
+        selectedScopes: this.availableScopes,
         clientId: this.model.clientId,
-        secret: this.model.secret
-      }
+        secret: this.model.secret,
+      };
       this.token = await this.TokenService.getToken(model);
-    }
+    },
+    async copyToken() {
+      let data = [
+        new window.ClipboardItem({
+          "text/plain": new Blob([`Bearer ${this.token}`], {
+            type: "text/plain",
+          }),
+        }),
+      ];
+      await navigator.clipboard.write(data);
+      this.ToastService.success("Copied Token");
+    },
+    reset() {
+      this.scopes = [];
+      this.focusedScope = null;
+      this.availableScopes = [];
+      this.selectedScopes = [];
+      this.token = "";
+      this.model.secret = "";
+      this.model.clientId = "";
+    },
   },
 };
 </script>

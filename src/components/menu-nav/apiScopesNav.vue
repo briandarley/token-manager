@@ -20,17 +20,17 @@
         <div class="collapse navbar-collapse" id="apiScopesSubNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link" :to="apiScopesPath"
+              <router-link class="nav-link" :to="apiScopesPath" :class="{'active': navLinkActive('api-scope.edit')}"
                 >API Scopes</router-link
               >
             </li>
             <li class="nav-item" v-if="apiScopeId">
-              <router-link class="nav-link" :to="apiScopeClaimsPath"
+              <router-link class="nav-link" :to="apiScopeClaimsPath" :class="{'active': navLinkActive('api-scope.claims')}"
                 >Claims</router-link
               >
             </li>
             <li class="nav-item" v-if="apiScopeId">
-              <router-link class="nav-link" :to="apiScopePropertiesPath"
+              <router-link class="nav-link" :to="apiScopePropertiesPath" :class="{'active': navLinkActive('api-scope.properties')}"
                 >Properties</router-link
               >
             </li>
@@ -57,7 +57,9 @@ export default {
     setApiScopeIdFromRoute() {
       this.apiScopeId = this.$route.params.id;
     },
-    
+    navLinkActive(navLink) {
+      return this.$route.name == navLink;
+    },
   },
   computed: {
     apiScopesPath() {
@@ -75,16 +77,20 @@ export default {
         return `${this.menuRoutes.apiScopesPath}/${this.apiScopeId}/properties`;
       return "";
     },
-    
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .nav-link,
 .nav-item a {
   color: $white;
   &:hover {
     color: $white;
   }
+}
+.nav-item .active {
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: underline;
 }
 </style>

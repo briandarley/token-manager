@@ -54,34 +54,42 @@ export const routes = [
             },
             {
                 path: 'secrets',
+                name: 'client.secrets',
                 component: ClientSecretsView
             },
             {
                 path: 'scopes',
+                name: 'client.scopes',
                 component: ClientScopesView
             },
             {
                 path: 'cors',
+                name: 'client.cors',
                 component: ClientCorsView
             },
             {
                 path: 'grant-types',
+                name: 'client.grantTypes',
                 component: ClientGrantTypesView
             },
             {
                 path: 'redirects',
+                name: 'client.redirects',
                 component: ClientRedirectsView
             },
             {
                 path: 'claims',
+                name: 'client.claims',
                 component: ClientClaimsView
             },
             {
                 path: 'properties',
+                name: 'client.properties',
                 component: ClientPropertiesView
             },
             {
                 path: 'restrictions',
+                name: 'client.restrictions',
                 component: ClientRestrictionsView 
             }
         ]
@@ -107,18 +115,22 @@ export const routes = [
             },
             {
                 path: 'secrets',
+                name: 'api-resource.secrets',
                 component: ApiResourceSecretsView
             },
             {
                 path: 'scopes',
+                name: 'api-resource.scopes',
                 component: ApiResourceScopesView
             },
             {
                 path: 'claims',
+                name: 'api-resource.claims',
                 component: ApiResourceClaimsView
             },
             {
                 path: 'properties',
+                name: 'api-resource.properties',
                 component: ApiResourcePropertiesView
             }
         ]
@@ -141,10 +153,12 @@ export const routes = [
             },
             {
                 path: 'claims',
+                name: 'api-scope.claims',
                 component: ApiScopeClaimsView
             },
             {
                 path: 'properties',
+                name: 'api-scope.properties',
                 component: ApiScopePropertiesView
             }
             

@@ -20,27 +20,27 @@
         <div class="collapse navbar-collapse" id="apiResourceSubNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link" :to="apiResourcePath"
+              <router-link class="nav-link" :to="apiResourcePath" :class="{'active': navLinkActive('api-resource.edit')}"
                 >API Resource</router-link
               >
             </li>
             <li class="nav-item" v-if="apiResourceId">
-              <router-link class="nav-link" :to="apiResourceScopesPath"
+              <router-link class="nav-link" :to="apiResourceScopesPath" :class="{'active': navLinkActive('api-resource.scopes')}"
                 >Scopes</router-link
               >
             </li>
             <li class="nav-item" v-if="apiResourceId">
-              <router-link class="nav-link" :to="apiResourceClaimsPath"
+              <router-link class="nav-link" :to="apiResourceClaimsPath" :class="{'active': navLinkActive('api-resource.claims')}"
                 >Claims</router-link
               >
             </li>
             <li class="nav-item" v-if="apiResourceId">
-              <router-link class="nav-link" :to="apiResourcePropertiesPath"
+              <router-link class="nav-link" :to="apiResourcePropertiesPath" :class="{'active': navLinkActive('api-resource.properties')}"
                 >Properties</router-link
               >
             </li>
             <li class="nav-item" v-if="apiResourceId">
-              <router-link class="nav-link" :to="apiResourceSecretsPath"
+              <router-link class="nav-link" :to="apiResourceSecretsPath" :class="{'active': navLinkActive('api-resource.secrets')}"
                 >Secrets</router-link
               >
             </li>
@@ -69,6 +69,9 @@ export default {
     setApiResourceIdFromRoute() {
       this.apiResourceId = this.$route.params.id;
     },
+    navLinkActive(navLink){
+      return this.$route.name == navLink;
+    }
   },
   computed: {
     apiResourcePath() {
@@ -96,15 +99,20 @@ export default {
         return `${this.menuRoutes.apiResourcePath}/${this.apiResourceId}/secrets`;
       return "";
     }
-   
+    
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .nav-link,.nav-item a {
   color: $white;
   &:hover {
     color: $white;
   }
+}
+.nav-item .active {
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: underline;
 }
 </style>

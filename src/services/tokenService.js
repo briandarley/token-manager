@@ -39,7 +39,7 @@ export default function TokenService(httpHandlerService, commonExtensions, confi
                     data: data
                 }
                 let request = await axios(options);
-                console.log(request);
+   
                 return request.data.access_token;
                 // eslint-disable-next-line no-unreachable
                 // let request = await axios.post(`${config.security.authority}/connect/token`, jsonModel)
