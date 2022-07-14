@@ -6,6 +6,7 @@ import ApiResourceParentView from '../views/apiResourceParentView'
 import TokensView from '../views/tokensView';
 import ClientTokensView from '../views/tokens/clientTokensView';
 import ApiScopesParentView from '../views/apiScopesParentView';
+import ApiEndpointsParentView from '../views/apiEndpointsParentView';
 import {
     ClientView
     ,ClientEditView
@@ -32,6 +33,11 @@ import {
     , ApiResourceScopesView
     , ApiResourceSecretsView
 } from '../views/apiResources/index';
+
+import {
+    ApiEndpointEditView
+    ,ApiEndpointView
+} from '../views/apiEndpoints/index';
 
 export const routes = [
     { name: 'home', path: '/', component: HomePage },
@@ -94,10 +100,8 @@ export const routes = [
             }
         ]
     },
-
     
     { name: 'api-resources', path: '/api-resources', component: ApiResourceParentView },
-    
     {
         props:true,
         name: 'api-resource', 
@@ -165,5 +169,22 @@ export const routes = [
         ]
     },
     { name: 'tokens', path: '/tokens', component: ClientTokensView  },
-
+    { name: 'api-endpoints', path: '/api-endpoints', component: ApiEndpointsParentView },
+    {
+        props: true,
+        name: 'api-endpoint', 
+        path: '/api-endpoint/:id?', 
+        component: ApiEndpointView,
+        redirect: {
+            name: 'api-endpoint.edit'
+        },
+        children: [
+            {
+                alias: '',
+                path: '',
+                name: 'api-endpoint.edit',
+                component: ApiEndpointEditView
+            }
+        ]
+    }
 ];

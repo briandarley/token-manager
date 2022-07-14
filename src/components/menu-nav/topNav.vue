@@ -34,6 +34,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/tokens" >Tokens</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/api-endpoints" >API Endpoints</router-link>
+          </li>
         </ul>
         <div>
          Env: {{ environment }}

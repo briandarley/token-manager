@@ -202,6 +202,19 @@ export default function ValidationService() {
             }            
             return yup.object().shape(validationObject)
         },
+        apiEndpointSchema() {
+            let validationObject = {
+                name: yup.string().trim().required('Name is required'),
+                description: yup.string().nullable(true).trim(),
+                notes: yup.string().nullable(true).trim(),
+                environment: yup.string().trim().required('Environment is required'),
+                uri: yup.string().required('Uri is required')
+
+                
+                
+            }            
+            return yup.object().shape(validationObject)
+        }
     }
 }
 injector.service('ValidationService', ValidationService)

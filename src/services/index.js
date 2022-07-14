@@ -12,6 +12,7 @@ import ApiResourceService from './apiResourceService';
 import ApiScopesService from './apiScopesService';
 import TokenService from './tokenService';
 import SharedFunctions from './sharedFunctions';
+import ApiEndpointService from './apiEndpointService';
 export {
     ConfigReaderService
     , UserProfileService
@@ -27,4 +28,5 @@ export {
     ,ApiScopesService 
     ,TokenService
     ,SharedFunctions
+    ,ApiEndpointService 
 };
